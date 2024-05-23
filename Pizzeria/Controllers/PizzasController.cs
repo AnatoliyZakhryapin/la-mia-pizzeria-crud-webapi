@@ -69,5 +69,15 @@ namespace Pizzeria.Controllers
 
             return Ok("Modificato con successo!");
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id) 
+        {
+            bool result = PizzaManager.DeletePizza(id);
+
+            if (result == true) return Ok($"Pizza con ID {id} è stata cancellata con successo");
+
+            return NotFound();
+        }
     }
 }
