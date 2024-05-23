@@ -54,10 +54,20 @@ namespace Pizzeria.Controllers
         }
 
         [HttpPost]
-        public IActionResult Store([FromBody] PizzaAPIStoreRequest request ) 
+        public IActionResult Store([FromBody] PizzaAPIPostRequest request)
         {
             PizzaManager.AddNewPizza(request.Pizza, request.SelectedIngredients);
             return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(long id, [FromBody] PizzaAPIPostRequest request)
+        {
+            bool result = PizzaManager.UpdatePizza(id, request.Pizza, request.SelectedIngredients);
+            if (result != true)
+                return NotFound("Modifica non e andata a buon fine!");
+
+            return Ok("Modificato con successo!");
         }
     }
 }

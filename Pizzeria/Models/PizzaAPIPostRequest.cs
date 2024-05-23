@@ -1,6 +1,6 @@
 ﻿namespace Pizzeria.Models
 {
-    public class PizzaAPIStoreRequest
+    public class PizzaAPIPostRequest
     {
         public Pizza Pizza { get; set; }
         public List<string> SelectedIngredients { get; set; }
