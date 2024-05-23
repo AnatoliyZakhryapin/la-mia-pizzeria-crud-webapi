@@ -52,5 +52,12 @@ namespace Pizzeria.Controllers
                 return NotFound($"Pizza con ID {id} non essiste.");
             return Ok(pizzaFinded);
         }
+
+        [HttpPost]
+        public IActionResult Store([FromBody] PizzaAPIStoreRequest request ) 
+        {
+            PizzaManager.AddNewPizza(request.Pizza, request.SelectedIngredients);
+            return Ok();
+        }
     }
 }
