@@ -1,0 +1,108 @@
+﻿@using Microsoft.AspNetCore.Components
+
+@{
+    ViewData["Title"] = "Pizzeria";
+    Layout = "_CustomLayout";
+}
+
+@model List<Pizza>
+
+<section class="main-page">
+    @* Start title *@
+    <div class="main-page_title mt-3">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <h1 class="fw-bold">Menu</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* Fine title *@
+
+    @* Start print pizze *@
+    <div class="main-page pizza-viewer mt-3">
+        <div class="container py-4">
+            
+            @if(Model.Count() > 0)
+            {
+                    @foreach (Pizza pizza in Model)
+                    {
+                        <div class="col-12">
+                            <div class="card border-0 border-3 border-bottom mb-3">
+                                <div class="row g-0">
+                                    <div class="col-md-4 text-center">
+                                        <img src="@Url.Content(pizza.FotoUrl)" class="img-fluid rounded-start" alt="...">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h2 class="card-title border-3 border-bottom d-flex justify-content-between fw-bold">@pizza.Name <span class="price">@pizza.Price euro</span></h2>
+                                            <h5 class="card-title pizza-category">@pizza.GetDisplayedCategory()</h5>
+                                            <p class="card-text mb-4 fst-italic">
+                                                Ingridients : @foreach (Ingredient i in pizza.Ingredients)
+                                                {
+                                                    <span>@i.Name,</span>
+                                                }
+                                            </p>
+                                            <div class="d-flex gap-3 flex-wrap">  
+                                                <a href="@Url.Action("PreShow", "Pizzeria", new {id = pizza.PizzaId, pizzaName = pizza.Name} )" class="btn btn-custom">Dettaglio pizza</a>
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <span class="d-flex gap-3">
+                                                        <a href="@Url.Action("PreUpdate", "Pizzeria", new {id = pizza.PizzaId, pizzaName = pizza.Name} )" class="btn btn-custom btn-trasparent">
+                                                            <i class="fa-regular fa-pen-to-square"></i>
+                                                            Edit
+                                                        </a>
+                                                        <form asp-controller="Pizzeria" asp-action="Delete" asp-route-id="@pizza.PizzaId" method="post" class="d-inline-block">
+                                                            @Html.AntiForgeryToken()
+                                                            <button type="submit" class="btn btn-custom btn-trasparent">
+                                                                <i class="fa-solid fa-trash"></i>
+                                                                CANCELLA
+                                                            </button>
+                                                        </form>
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           @*  <div class="card h-100">
+                                <img src="@Url.Content(pizza.FotoUrl)" class="card-img-top" alt="...">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">@pizza.Name</h5>
+                                    <h3 class="card-title">@pizza.GetDisplayedCategory()</h3>
+                                    <p class="card-text">@pizza.Description</p>
+                                    <p class="card-text">Ingridients:</p>
+                                    @foreach(Ingredient i in pizza.Ingredients)
+                                    {
+                                       <p>@i.Name</p>
+                                    }
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="price">@pizza.Price euro</div>
+                                        <a href="@Url.Action("PreShow", "Pizzeria", new {id = pizza.PizzaId, pizzaName = pizza.Name} )" class="btn btn-primary">Dettaglio pizza</a>
+                                        <a href="@Url.Action("PreUpdate", "Pizzeria", new {id = pizza.PizzaId, pizzaName = pizza.Name} )" class="btn btn-warning">Edit pizza</a>
+                                        <form asp-controller="Pizzeria" asp-action="Delete" asp-route-id="@pizza.PizzaId" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                CANCELLA
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div> *@
+                        </div>
+                    }
+            } else
+            {
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <h2>Non ci sono risultati</h2>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    @* Fine print pizze *@
+
+</section>

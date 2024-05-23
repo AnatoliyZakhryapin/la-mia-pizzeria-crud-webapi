@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Components
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_CustomLayout";
+}
+
+<section class="hero-section w-100 border-5">
+    <div class="container-fluid pb-3">
+        <div class="row">
+            <div class="col-12 col-sm-6">
+                <div class="row justify-content-center justify-content-sm-end h-100">
+                    <div class="col-8 col-md-6">
+                        <div class="card-hero d-flex flex-column h-100 py-3">
+                            <figure class="h-25 d-flex flex-column justify-content-end align-items-center">
+                                <img src="~/img/leaves.png" class="card-img-top w-25" alt="...">
+                            </figure>
+                            <div class="card-hero-body text-center">
+                                <h1 class="card-title card-hero mb-3">Italian pizza!</h1>
+                                <p class="card-text card-hero mb-5">Traditional taste straight from sunny Italy.</p>
+                                <a class="btn btn-custom fs-4" asp-area="" asp-controller="Pizzeria" asp-action="Index">Menu</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 d-flex align-items-center pe-0">
+                <figure class="m-0 h-100">
+                    <img src="~/img/background-1.jpg" alt="..." class="object-fit-cover m-0 h-100">
+                </figure>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="colored-lines"></div>
