@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Pizzeria.Data;
 using Pizzeria.Models;
 
@@ -40,6 +41,16 @@ namespace Pizzeria.Controllers
             }
 
             return Ok(listaPizzas);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Show(long id)
+        {
+            Pizza pizzaFinded = PizzaManager.GetPizzaById(id);
+
+            if (pizzaFinded == null)
+                return NotFound($"Pizza con ID {id} non essiste.");
+            return Ok(pizzaFinded);
         }
     }
 }

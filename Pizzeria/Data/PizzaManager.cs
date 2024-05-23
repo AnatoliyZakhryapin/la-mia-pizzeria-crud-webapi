@@ -92,7 +92,7 @@ namespace Pizzeria.Data
             return db.Pizzas.FirstOrDefault(p => p.Name == name);
         }
 
-        public static Pizza GetPizzaById(int id, bool includeReferences = true)
+        public static Pizza GetPizzaById(long id, bool includeReferences = true)
         {
             using PizzeriaDatabaseContext db = new PizzeriaDatabaseContext();
 
