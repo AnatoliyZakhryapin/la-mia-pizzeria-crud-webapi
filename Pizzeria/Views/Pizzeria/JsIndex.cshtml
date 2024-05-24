@@ -139,8 +139,14 @@
                                                             Ingridients : ${ingredientsList}
                                                     </p>
                                                     <div class="d-flex gap-3 flex-wrap">
-                                                        buttuns
-                                                    </div>
+                                                        <span class="d-flex gap-3">
+                                                                <a href="" class="btn btn-custom btn-trasparent">
+                                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                                    Edit
+                                                                </a>
+                                                                <button class="btn btn-custom btn-trasparent" onclick="deleteById(${pizza.pizzaId})">Delete</button>
+                                                            </span>
+                                                        </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -151,9 +157,9 @@
             });
     }
     function deleteById(id) {
-        axios.delete("/api/PostWeb/DeletePost/" + id)
+        axios.delete("/api/Pizzas/" + id)
             .then((res) => {
-                loadList('');
+                GetPizzas();
             });
     }
     function search(queryName) {
