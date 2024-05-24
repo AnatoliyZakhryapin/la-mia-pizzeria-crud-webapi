@@ -26,6 +26,9 @@
                     <li class="nav-item">
                         <a class="nav-link @(currentPage == "Home/Index" ? "active" : "") text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
+                     <li class="nav-item">
+                        <a class="nav-link @(currentPage == "Pizzeria/JsIndex" ? "active" : "") text-dark" asp-area="" asp-controller="Pizzeria" asp-action="JsIndex">JsIndex</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark @(currentPage == "Pizzeria/Index" || currentPage == "Pizzeria/Show" ? "active" : "")" asp-area="" asp-controller="Pizzeria" asp-action="Index">Menu</a>
                     </li>
