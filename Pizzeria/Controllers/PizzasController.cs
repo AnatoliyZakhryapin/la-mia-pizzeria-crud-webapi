@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Pizzeria.Data;
 using Pizzeria.Models;
@@ -16,7 +17,7 @@ namespace Pizzeria.Controllers
         {
             using PizzeriaDatabaseContext db = new PizzeriaDatabaseContext();
 
-            var query = db.Pizzas.AsQueryable();
+            var query = db.Pizzas.Include(p => p.Category).Include(p => p.Ingredients).AsQueryable();
 
             if (queryParameters.CategoryId.HasValue)
             {
@@ -25,12 +26,12 @@ namespace Pizzeria.Controllers
 
             if (!string.IsNullOrEmpty(queryParameters.Name))
             {
-                query = query.Where(p => p.Name.Contains(queryParameters.Name, StringComparison.OrdinalIgnoreCase));
+                query = query.Where(p => p.Name.ToLower().Contains(queryParameters.Name.ToLower()));
             }
 
             if (!string.IsNullOrEmpty(queryParameters.IngredientName))
             {
-                query = query.Where(p => p.Ingredients.Any(i => i.Name.Contains(queryParameters.IngredientName, StringComparison.OrdinalIgnoreCase)));
+                query = query.Where(p => p.Ingredients.Any(i => i.Name.ToLower().Contains(queryParameters.IngredientName.ToLower())));
             }
 
             if (queryParameters.MinPrice.HasValue)

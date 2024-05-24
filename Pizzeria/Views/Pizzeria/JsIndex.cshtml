@@ -11,5 +11,155 @@
             <h1>Js Index</h1>
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <div class="d-flex justify-content-center align-items-center gap-2">
+                <h1>Cerca pizza per il nome:</h1>
+                <input class="js_search" placeholder="Cerca per titolo" onkeyup="search(this.value)"/>
+            </div>
+        </div>
+    </div>
 </div>
 
+<div class="main-page pizza-viewer mt-3">
+    <div class="container py-4">
+        <div class="row js_no_pizzas d-none">
+            <div class="col">
+                <h3>Non ci sono pizze</h3>
+            </div>
+        </div>
+        <div class="row js_pizzas_table">
+
+        </div>
+@*         @if (Model.Count() > 0)
+        {
+            @foreach (Pizza pizza in Model)
+            {
+                <div class="col-12">
+                    <div class="card border-0 border-3 border-bottom mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-4 text-center">
+                                <img src="@Url.Content(pizza.FotoUrl)" class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h2 class="card-title border-3 border-bottom d-flex justify-content-between fw-bold">@pizza.Name <span class="price">@pizza.Price euro</span></h2>
+                                    <h5 class="card-title pizza-category">@pizza.GetDisplayedCategory()</h5>
+                                    <p class="card-text mb-4 fst-italic">
+                                        Ingridients : @foreach (Ingredient i in pizza.Ingredients)
+                                        {
+                                            <span>@i.Name,</span>
+                                        }
+                                    </p>
+                                    <div class="d-flex gap-3 flex-wrap">
+                                        <a href="@Url.Action("PreShow", "Pizzeria", new {id = pizza.PizzaId, pizzaName = pizza.Name} )" class="btn btn-custom">Dettaglio pizza</a>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <span class="d-flex gap-3">
+                                                <a href="@Url.Action("PreUpdate", "Pizzeria", new {id = pizza.PizzaId, pizzaName = pizza.Name} )" class="btn btn-custom btn-trasparent">
+                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                    Edit
+                                                </a>
+                                                <form asp-controller="Pizzeria" asp-action="Delete" asp-route-id="@pizza.PizzaId" method="post" class="d-inline-block">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-custom btn-trasparent">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                        CANCELLA
+                                                    </button>
+                                                </form>
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <h2>Non ci sono risultati</h2>
+                </div>
+            </div>
+        } *@
+    </div>
+</div>
+@* Fine print pizze *@
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    function GetPizzas(queryParametr) {
+        axios.get('https://localhost:7041/api/Pizzas',
+            {
+                params: queryParametr
+            }).then((res) => {
+                console.log(res)
+                if (res.data.length == 0) // Non abbiamo nessun post
+                {
+                    document.querySelector('.js_no_pizzas').classList.remove('d-none');
+                    document.querySelector('.js_pizzas_table').classList.add('d-none');
+                }
+                else {
+                    document.querySelector('.js_no_pizzas').classList.add('d-none');
+                    var pizzasTableDOMElement = document.querySelector('.js_pizzas_table');
+                    pizzasTableDOMElement.classList.remove('d-none');
+                    pizzasTableDOMElement.innerHTML = '';
+                    res.data.forEach((pizza) => {
+                        console.log(pizza);
+
+                        let fotoUrl;
+                        if (pizza.fotoUrl) {
+                            fotoUrl = pizza.fotoUrl.replace('~', '');
+                        } else {
+                            fotoUrl = "";
+                        }
+
+                        const categoryTitle = pizza.category?.title ?? "Categoria non disponibile";
+
+                        const ingredientsList = pizza.ingredients.length > 0
+                            ? pizza.ingredients.map(ingredient => ingredient.name).join(", ")
+                            : "Ingredienti non disponibili";
+
+                        pizzasTableDOMElement.innerHTML += `
+                                <div class="col-12">
+                                    <div class="card border-0 border-3 border-bottom mb-3">
+                                        <div class="row g-0">
+                                            <div class="col-md-4 text-center">
+                                                <img src="${fotoUrl}" class="img-fluid rounded-start" alt="...">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    <h2 class="card-title border-3 border-bottom d-flex justify-content-between fw-bold">${pizza.name}<span class="price">${pizza.price} euro</span></h2>
+                                                            <h5 class="card-title pizza-category">${categoryTitle}</h5>
+                                                    <p class="card-text mb-4 fst-italic">
+                                                            Ingridients : ${ingredientsList}
+                                                    </p>
+                                                    <div class="d-flex gap-3 flex-wrap">
+                                                        buttuns
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>`
+                    });
+                }
+            });
+    }
+    function deleteById(id) {
+        axios.delete("/api/PostWeb/DeletePost/" + id)
+            .then((res) => {
+                loadList('');
+            });
+    }
+    function search(queryName) {
+        console.log(queryName);
+        GetPizzas({ Name: queryName });
+    }
+       GetPizzas();
+    // document.querySelector('.js_search').addEventListener('keyup', search)
+</script>
